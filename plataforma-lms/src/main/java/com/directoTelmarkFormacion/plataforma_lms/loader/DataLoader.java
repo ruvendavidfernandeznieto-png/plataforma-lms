@@ -13,6 +13,9 @@ import java.util.Optional;
 @Component
 public class DataLoader implements CommandLineRunner {
     @Autowired
+    private com.directoTelmarkFormacion.plataforma_lms.repository.CourseRepository courseRepository;
+
+    @Autowired
     private UserRepository userRepository;
 
     @Autowired
@@ -25,7 +28,7 @@ public class DataLoader implements CommandLineRunner {
     public void run(String... args) throws Exception{
         System.out.println("---INICIANDO CARGA DE DATOS---");
 
-        Role adminRole = roleRepository.findByname("ROLE_ADMIN").orElse(null);
+        Role adminRole = roleRepository.findByName("ROLE_ADMIN").orElse(null);
         String emailAdmin = "admin@empresa.com";
         if (adminRole == null){
             adminRole = new Role("ROLE_ADMIN");
@@ -51,5 +54,14 @@ public class DataLoader implements CommandLineRunner {
             System.out.println(">>> Usuario ADMIN existente actualizado. Contraseña reseteada a: admin123");
         }
         System.out.println("--- CARGA DE DATOS FINALIZADA ---");
+        if (courseRepository.count()==0){
+            com.directoTelmarkFormacion.plataforma_lms.model.Course cursoJava = new com.directoTelmarkFormacion.plataforma_lms.model.Course();
+            cursoJava.setTitle("Curso Intensivo de Java Spring Boot");
+            cursoJava.setDescription("Aprende a crear aplicaciones web profesionales desde 0.");
+            cursoJava.setPublished(true);
+
+            courseRepository.save(cursoJava);
+            System.out.println(">>> Curso de prueba Creado: Java Spring Boot");
+        }
     }
 }
