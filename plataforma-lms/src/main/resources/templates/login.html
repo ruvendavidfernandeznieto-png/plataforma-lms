@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>DTL | Login</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" th:href="@{/images/logo.png}">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #004e92;
+            background-image: radial-gradient(#ffffff33 1px, transparent 1px), linear-gradient(135deg, #002b5e 0%, #004e92 50%, #007bff 100%);
+            background-size: 20px 20px, 100% 100%;
+        }
+
+        .login-container {
+            /* Fondo semi-transparente muy sutil */
+            background-color: rgba(255, 255, 255, 0.1);
+            /* Efecto de desenfoque detrás del cristal */
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+
+            border: 1px solid rgba(255, 255, 255, 0.2);
+
+            width: 100%;
+            max-width: 400px;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            position: relative;
+            z-index: 10;
+        }
+
+        .logo {
+            max-width: 260px;
+            margin-bottom: 30px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            /* Truco PRO: Si tu logo tiene letras negras y no se ven,
+               descomenta la siguiente línea para volverlo blanco: */
+            /* filter: brightness(0) invert(1); */
+        }
+
+        .form-group { margin-bottom: 20px; }
+
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            background-color: #ffffff; /* Blanco puro */
+            box-sizing: border-box;
+            font-size: 16px;
+            color: #333;
+            outline: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        input::placeholder { color: #999; }
+        input:focus { transform: scale(1.02); transition: 0.2s; }
+
+        .btn-login {
+            width: 100%;
+            padding: 15px;
+            background-color: #0066ff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 102, 255, 0.4);
+        }
+        .btn-login:hover { background-color: #0052cc; transform: translateY(-2px); }
+
+        .register-link {
+            display: block;
+            margin-top: 20px;
+            color: white;
+            text-decoration: none;
+            font-size: 0.95em;
+            opacity: 0.9;
+            transition: opacity 0.3s;
+        }
+        .register-link:hover { opacity: 1; text-decoration: underline; }
+
+        .separator {
+            margin: 20px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .btn-register {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: rgba(255, 255, 255, 0.15);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            box-sizing: border-box;
+            border: 1px solid rgba(255,255,255,0.3);
+            transition: background 0.3s;
+        }
+        .btn-register:hover { background-color: rgba(255, 255, 255, 0.3); }
+
+        .error-msg {
+            color: white;
+            background-color: rgba(220, 53, 69, 0.8);
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .success-msg {
+            color: white;
+            background-color: rgba(40, 167, 69, 0.8);
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="login-container">
+
+    <img th:src="@{/images/logo.png}" alt="Logo" class="logo" />
+
+    <div th:if="${param.error}" class="error-msg">❌ Credenciales incorrectas</div>
+    <div th:if="${param.logout}" class="success-msg">✅ Sesión cerrada</div>
+
+    <form th:action="@{/login}" method="post">
+        <div class="form-group">
+            <input type="text" name="username" placeholder="Usuario / Email" required autofocus />
+        </div>
+        <div class="form-group">
+            <input type="password" name="password" placeholder="Contraseña" required />
+        </div>
+
+        <button type="submit" class="btn-login">Iniciar Sesión</button>
+    </form>
+
+    <div class="separator"></div>
+
+    <a th:href="@{/register}" class="btn-register">Crear cuenta nueva</a>
+
+</div>
+
+</body>
+</html>

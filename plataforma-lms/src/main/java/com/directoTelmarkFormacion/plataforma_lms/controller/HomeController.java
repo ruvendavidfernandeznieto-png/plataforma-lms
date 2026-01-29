@@ -1,12 +1,17 @@
 package com.directoTelmarkFormacion.plataforma_lms.controller;
 
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
 
-@RestController
+@Controller
 public class HomeController {
     @GetMapping("/")
     public String home(){
-        return "Prueba de funcionamiento :D";
+        return "redirect:/courses";
+    }
+
+    @GetMapping("/login")
+    public String login(){
+        return "login";
     }
 }
