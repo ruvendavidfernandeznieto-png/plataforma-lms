@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class PlataformaLmsApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(PlataformaLmsApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(PlataformaLmsApplication.class, args);
+    }
 
 }
