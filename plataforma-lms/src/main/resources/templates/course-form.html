@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Nuevo Curso</title>
+    <style>
+        body { font-family: sans-serif; padding: 40px; background-color: #f4f4f9; }
+        .container { max-width: 600px; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        h2 { text-align: center; color: #333; }
+
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input[type="text"], textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
+        textarea { height: 100px; resize: vertical; }
+
+        button { width: 100%; padding: 10px; background: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; margin-top: 10px; }
+        button:hover { background: #218838; }
+        .back-link { display: block; text-align: center; margin-top: 15px; color: #666; text-decoration: none; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>📝 Crear Nuevo Curso</h2>
+
+    <form th:action="@{/courses/save}" th:object="${curso}" method="post">
+        <input type="hidden" th:field="*{id}"/>
+        <div class="form-group">
+            <label>Título del Curso:</label>
+            <input type="text" th:field="*{title}" placeholder="Ej: Introducción a Python" required />
+        </div>
+
+        <div class="form-group">
+            <label>Descripción:</label>
+            <textarea th:field="*{description}" placeholder="¿De qué trata el curso?"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>
+                <input type="checkbox" th:field="*{published}" />
+                Publicar inmediatamente
+            </label>
+        </div>
+
+        <button type="submit">Guardar Curso</button>
+    </form>
+
+    <a th:href="@{/courses}" class="back-link">Cancelar y volver</a>
+</div>
+
+</body>
+</html>

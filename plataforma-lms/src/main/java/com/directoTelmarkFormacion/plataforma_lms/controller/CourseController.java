@@ -19,4 +19,29 @@ public class CourseController {
        model.addAttribute("cursos", courseService.obtenerTodos());
        return "course-list";
     }
+
+    @GetMapping("/new")
+    public String mostrarFormulario(Model model){
+        model.addAttribute("curso", new com.directoTelmarkFormacion.plataforma_lms.model.Course());
+        return "course-form";
+    }
+
+    @org.springframework.web.bind.annotation.PostMapping("/save")
+    public String guardarCurso(@org.springframework.web.bind.annotation.ModelAttribute("curso") com.directoTelmarkFormacion.plataforma_lms.model.Course course){
+        courseService.guardarCurso(course);
+        return "redirect:/courses";
+    }
+
+    @GetMapping("/edit/{id}")
+    public String editarFormulario(@org.springframework.web.bind.annotation.PathVariable Long id, Model model){
+        com.directoTelmarkFormacion.plataforma_lms.model.Course cursoExistente = courseService.obtenerPorId(id).orElse(null);
+        model.addAttribute("curso", cursoExistente);
+        return "course-form";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String eliminarCurso(@org.springframework.web.bind.annotation.PathVariable Long id){
+        courseService.borrarCurso(id);
+        return "redirect:/courses";
+    }
 }
