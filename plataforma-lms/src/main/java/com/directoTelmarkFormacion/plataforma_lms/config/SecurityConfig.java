@@ -27,14 +27,12 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        // 1. Permitimos cargar las imágenes (logo), CSS y JS
-                        .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
+                        .requestMatchers("/css/**", "/js/**", "/images/**", "/register", "/register/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
-                        // 2. ¡ESTO ES LO IMPORTANTE! Usamos tu página personalizada
                         .loginPage("/login")
-                        .defaultSuccessUrl("/courses", true) // Al entrar, te lleva a tus cursos
+                        .defaultSuccessUrl("/courses", true)
                         .permitAll()
                 )
                 .logout(logout -> logout

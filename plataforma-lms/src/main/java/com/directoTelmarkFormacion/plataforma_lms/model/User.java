@@ -17,8 +17,6 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @Column(name = "full_name")
-    private String fullName;
 
     private Boolean active = true;
 
@@ -49,12 +47,12 @@ public class User {
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
 
-    public String getFullName() { return fullName; }
-    public void setFullName(String fullName) { this.fullName = fullName; }
-
     public Boolean getActive() { return active; }
     public void setActive(Boolean active) { this.active = active; }
 
     public Role getRole() { return role; }
     public void setRole(Role role) { this.role = role; }
+
+    public LocalDateTime getCreatedAt(){return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt){this.createdAt = createdAt;}
 }

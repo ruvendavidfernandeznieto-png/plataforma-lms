@@ -36,11 +36,9 @@ public class DataLoader implements CommandLineRunner {
         }
 
         if (!userRepository.existsByEmail(emailAdmin)) {
-            // SI NO EXISTE: Lo crea de cero
             User admin = new User();
             admin.setEmail(emailAdmin);
             admin.setPassword(passwordEncoder.encode("admin123")); // Contraseña: admin123
-            admin.setFullName("Administrador del Sistema");
             admin.setRole(adminRole);
             admin.setActive(true);
             userRepository.save(admin);
@@ -48,8 +46,8 @@ public class DataLoader implements CommandLineRunner {
         } else {
             User admin = userRepository.findByEmail(emailAdmin).get();
             admin.setPassword(passwordEncoder.encode("admin123"));
-            admin.setRole(adminRole); // Nos aseguramos de que sea admin
-            admin.setActive(true);    // Nos aseguramos de que esté activo
+            admin.setRole(adminRole);
+            admin.setActive(true);
             userRepository.save(admin);
             System.out.println(">>> Usuario ADMIN existente actualizado. Contraseña reseteada a: admin123");
         }

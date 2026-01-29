@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>DTL | Login</title>
+    <title>DTL | Registro</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" th:href="@{/images/logo.png}">
@@ -35,108 +35,78 @@
             z-index: 10;
         }
 
-        .logo { max-width: 260px; margin-bottom: 30px; display: block; margin-left: auto; margin-right: auto; }
-        .form-group { margin-bottom: 20px; text-align: left; }
+        .logo { max-width: 200px; margin-bottom: 20px; display: block; margin-left: auto; margin-right: auto; }
+        .form-group { margin-bottom: 15px; text-align: left; }
+        label { color: white; font-weight: 500; font-size: 0.9em; margin-bottom: 5px; display: block; text-shadow: 0 1px 2px rgba(0,0,0,0.3); }
 
-        input[type="text"], input[type="password"] {
+        input[type="text"], input[type="password"], input[type="email"] {
             width: 100%;
-            padding: 15px;
-            padding-right: 45px; /* Dejamos espacio para el ojo */
+            padding: 12px;
+            padding-right: 40px; /* Espacio para el ojo */
             border: none;
             border-radius: 8px;
             background-color: #ffffff;
-            font-size: 16px;
+            font-size: 15px;
             color: #333;
             outline: none;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
             box-sizing: border-box;
         }
-        input::placeholder { color: #999; }
-        input:focus { transform: scale(1.01); transition: 0.2s; }
+        input:focus { transform: scale(1.01); box-shadow: 0 0 0 2px rgba(255,255,255,0.5); }
 
-        .password-wrapper {
-            position: relative;
-            width: 100%;
-        }
-
+        .password-wrapper { position: relative; width: 100%; }
         .toggle-password {
-            position: absolute;
-            top: 50%;
-            right: 15px;
-            transform: translateY(-50%);
-            cursor: pointer;
-            background: none;
-            border: none;
-            padding: 0;
-            outline: none;
-            opacity: 0.6;
-            transition: opacity 0.3s;
-            display: flex;
-            align-items: center;
+            position: absolute; top: 50%; right: 10px;
+            transform: translateY(-50%); cursor: pointer;
+            background: none; border: none; padding: 0;
+            opacity: 0.6; display: flex; align-items: center;
         }
         .toggle-password:hover { opacity: 1; }
-        .toggle-password svg { width: 20px; height: 20px; fill: #666; }
-
-        .btn-login {
-            width: 100%;
-            padding: 15px;
-            background-color: #0066ff;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 10px;
-            transition: all 0.3s;
-            box-shadow: 0 5px 15px rgba(0, 102, 255, 0.4);
-        }
-        .btn-login:hover { background-color: #0052cc; transform: translateY(-2px); }
+        .toggle-password svg { width: 18px; height: 18px; fill: #666; }
 
         .btn-register {
-            display: block; width: 100%; padding: 12px;
-            background-color: rgba(255, 255, 255, 0.15);
-            color: white; text-decoration: none; border-radius: 8px;
-            font-weight: bold; box-sizing: border-box;
-            border: 1px solid rgba(255,255,255,0.3); transition: background 0.3s;
+            width: 100%; padding: 12px; background-color: #28a745;
+            color: white; border: none; border-radius: 8px;
+            font-size: 18px; font-weight: bold; cursor: pointer;
+            margin-top: 20px; transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
         }
-        .btn-register:hover { background-color: rgba(255, 255, 255, 0.3); }
+        .btn-register:hover { background-color: #218838; transform: translateY(-2px); }
 
-        .separator { margin: 20px 0; border-bottom: 1px solid rgba(255,255,255,0.2); }
-        .error-msg { color: white; background-color: rgba(220, 53, 69, 0.8); padding: 10px; border-radius: 5px; margin-bottom: 20px; }
-        .success-msg { color: white; background-color: rgba(40, 167, 69, 0.8); padding: 10px; border-radius: 5px; margin-bottom: 20px; }
+        .back-link { display: block; margin-top: 20px; color: white; text-decoration: none; font-size: 0.9em; opacity: 0.8; }
+        .back-link:hover { opacity: 1; text-decoration: underline; }
+        .error-msg { color: white; background-color: rgba(220, 53, 69, 0.9); padding: 10px; border-radius: 5px; margin-bottom: 15px; font-size: 0.9em; }
     </style>
 </head>
 <body>
 
 <div class="login-container">
     <img th:src="@{/images/logo.png}" alt="Logo" class="logo" />
+    <h2 style="color: white; margin-top: 0; margin-bottom: 20px; text-shadow: 0 2px 4px rgba(0,0,0,0.3);">Crear Cuenta</h2>
 
-    <div th:if="${param.error}" class="error-msg">❌ Credenciales incorrectas</div>
-    <div th:if="${param.logout}" class="success-msg">✅ Sesión cerrada</div>
+    <div th:if="${error}" class="error-msg" th:text="${error}"></div>
 
-    <form th:action="@{/login}" method="post">
+    <form th:action="@{/register}" method="post">
         <div class="form-group">
-            <input type="text" name="username" placeholder="Usuario / Email" required autofocus />
+            <label>Correo Electrónico</label>
+            <input type="email" name="username" placeholder="juan@ejemplo.com" required autofocus />
         </div>
 
         <div class="form-group">
+            <label>Contraseña</label>
             <div class="password-wrapper">
-                <input type="password" name="password" id="passwordInput" placeholder="Contraseña" required />
-
-                <button type="button" class="toggle-password" onclick="togglePassword('passwordInput', 'eyeIcon1')">
-                    <svg id="eyeIcon1" viewBox="0 0 24 24">
+                <input type="password" name="password" id="regPassword" placeholder="Elige una contraseña" required />
+                <button type="button" class="toggle-password" onclick="togglePassword('regPassword', 'eyeIcon2')">
+                    <svg id="eyeIcon2" viewBox="0 0 24 24">
                         <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
                     </svg>
                 </button>
             </div>
         </div>
 
-        <button type="submit" class="btn-login">Iniciar Sesión</button>
+        <button type="submit" class="btn-register">Registrarse</button>
     </form>
 
-    <div class="separator"></div>
-    <a th:href="@{/register}" class="btn-register">Crear cuenta nueva</a>
+    <a th:href="@{/login}" class="back-link">← Volver al inicio de sesión</a>
 </div>
 
 <script>
@@ -149,7 +119,6 @@
             icon.innerHTML = '<path d="M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.44-4.75-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16C10.74 7.13 11.35 7 12 7zM2 4.27l2.28 2.28.46.46C3.08 8.3 1.78 10.02 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22 21 20.73 3.27 3 2 4.27zM7.53 9.8l1.55 1.55c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3 .22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53-2.76 0-5-2.24-5-5 0-.79.2-1.53.53-2.2zm4.31-.78l3.15 3.15.02-.16c0-1.66-1.34-3-3-3l-.17.01z"/>';
         } else {
             input.type = "password";
-            // Volver a "Ojo normal"
             icon.innerHTML = '<path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>';
         }
     }
