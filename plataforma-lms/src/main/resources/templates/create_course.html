@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>DTL | Nuevo Curso</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" th:href="@{/images/logo.png}">
+
+    <style>
+        /* --- 1. FONDO (Mismo que la lista) --- */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #004e92;
+            background-image: radial-gradient(#ffffff33 1px, transparent 1px), linear-gradient(135deg, #002b5e 0%, #004e92 50%, #007bff 100%);
+            background-size: 20px 20px, 100% 100%;
+            background-attachment: fixed;
+            color: white;
+        }
+
+        /* --- 2. CONTENEDOR (Cristal) --- */
+        .glass-panel {
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 40px;
+            width: 100%;
+            max-width: 600px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+        }
+
+        h2 { text-align: center; margin-top: 0; margin-bottom: 30px; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+
+        /* --- 3. INPUTS --- */
+        label { display: block; margin-bottom: 8px; font-weight: bold; font-size: 0.95rem; }
+
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.9); /* Blanco casi opaco para leer bien */
+            color: #333;
+            font-family: inherit;
+            box-sizing: border-box;
+        }
+
+        input:focus, textarea:focus {
+            background: white;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(255,255,255,0.3);
+        }
+
+        /* --- 4. BOTONES --- */
+        .btn-container { display: flex; gap: 15px; margin-top: 10px; }
+
+        .btn-save {
+            flex: 2;
+            padding: 12px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+        .btn-save:hover { background: #218838; transform: translateY(-2px); }
+
+        .btn-cancel {
+            flex: 1;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: 0.2s;
+            display: flex; justify-content: center; align-items: center;
+        }
+        .btn-cancel:hover { background: rgba(255, 255, 255, 0.3); }
+
+    </style>
+</head>
+<body>
+
+<div class="glass-panel">
+    <h2>✨ Nuevo Curso</h2>
+
+    <form th:action="@{/courses/save}" method="post" th:object="${course}">
+
+        <label>Título del Curso</label>
+        <input type="text" th:field="*{title}" placeholder="Ej: Introducción a Spring Boot" required autofocus />
+
+        <label>Descripción</label>
+        <textarea th:field="*{description}" rows="5" placeholder="¿Qué aprenderán los alumnos?" required></textarea>
+
+        <div class="btn-container">
+            <a th:href="@{/courses}" class="btn-cancel">Cancelar</a>
+            <button type="submit" class="btn-save">Guardar Curso</button>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>

@@ -1,106 +1,170 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Lista de Cursos</title>
+    <title>DTL | Mis Cursos</title>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" th:href="@{/images/logo.png}">
+
     <style>
-        /* Estilos generales */
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 40px; background-color: #f4f4f9; }
-        .container { max-width: 1000px; margin: 0 auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+         body {
+             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+             min-height: 100vh;
+             margin: 0;
+             padding: 20px;
+             display: flex;
+             justify-content: center;
+             align-items: flex-start; /* Para que la tabla empiece arriba */
+             background-color: #004e92;
+             background-image: radial-gradient(#ffffff33 1px, transparent 1px), linear-gradient(135deg, #002b5e 0%, #004e92 50%, #007bff 100%);
+             background-size: 20px 20px, 100% 100%;
+             background-attachment: fixed;
+             color: white;
+         }
 
-        h1 { color: #333; margin-bottom: 20px; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+         .glass-container {
+             background-color: rgba(255, 255, 255, 0.1);
+             backdrop-filter: blur(10px);
+             -webkit-backdrop-filter: blur(10px);
+             border: 1px solid rgba(255, 255, 255, 0.2);
+             border-radius: 20px;
+             padding: 40px;
+             width: 100%;
+             max-width: 1000px; /* Ancho máximo para que quede elegante */
+             box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+             margin-top: 40px;
+         }
 
-        /* Estilo de la tabla */
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #ddd; }
-        th { background-color: #007bff; color: white; font-weight: 600; }
-        tr:hover { background-color: #f8f9fa; }
+         .header-actions {
+             display: flex;
+             justify-content: space-between;
+             align-items: center;
+             margin-bottom: 30px;
+             border-bottom: 1px solid rgba(255,255,255,0.2);
+             padding-bottom: 20px;
+         }
 
-        /* Badges (Etiquetas de estado) */
-        .badge { padding: 6px 12px; border-radius: 20px; font-size: 0.85em; font-weight: bold; text-transform: uppercase; }
-        .badge-success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
-        .badge-danger { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+         h1 { margin: 0; font-size: 2rem; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
 
-        /* --- BOTONES (AQUÍ ESTÁ LA MAGIA) --- */
+         .btn-new {
+             background: #28a745;
+             color: white;
+             padding: 10px 20px;
+             text-decoration: none;
+             border-radius: 50px;
+             font-weight: bold;
+             box-shadow: 0 4px 15px rgba(40, 167, 69, 0.4);
+             transition: transform 0.2s, background 0.2s;
+         }
+         .btn-new:hover { background: #218838; transform: translateY(-2px); }
 
-        /* Botón verde de "Crear Nuevo" */
-        .btn-crear {
-            display: inline-block; padding: 12px 25px; background: #28a745; color: white;
-            text-decoration: none; border-radius: 5px; font-weight: bold; margin-bottom: 20px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2); transition: background 0.3s;
-        }
-        .btn-crear:hover { background: #218838; }
+         table {
+             width: 100%;
+             border-collapse: collapse;
+             color: white;
+         }
 
-        /* Clase base para botones de acción */
-        .btn {
-            display: inline-block;
-            padding: 8px 15px;
-            text-decoration: none;
-            border-radius: 4px;
-            font-size: 0.9em;
-            font-weight: bold;
-            color: white !important; /* Fuerza el texto blanco */
-            transition: opacity 0.3s;
-            margin-right: 5px;
-            border: none;
-            cursor: pointer;
-        }
-        .btn:hover { opacity: 0.8; }
+         th {
+             text-align: left;
+             padding: 15px;
+             background-color: rgba(0, 0, 0, 0.2); /* Oscurecer un poco la cabecera */
+             border-radius: 5px;
+             font-weight: 600;
+             text-transform: uppercase;
+             font-size: 0.85rem;
+             letter-spacing: 1px;
+         }
 
-        /* Botón Editar (AZUL) */
-        .btn-edit { background-color: #007bff; }
+         td {
+             padding: 15px;
+             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+             vertical-align: middle;
+         }
 
-        /* Botón Borrar (ROJO) */
-        .btn-delete { background-color: #dc3545; }
+         tr:last-child td { border-bottom: none; }
+
+         tr:hover {
+             background-color: rgba(255, 255, 255, 0.05); /* Efecto hover sutil */
+         }
+
+         .badge {
+             padding: 5px 10px;
+             border-radius: 12px;
+             font-size: 0.75rem;
+             font-weight: bold;
+             text-transform: uppercase;
+         }
+         .badge-success { background-color: rgba(40, 167, 69, 0.2); color: #9be6a8; border: 1px solid #28a745; }
+         .badge-draft { background-color: rgba(255, 193, 7, 0.2); color: #ffeeba; border: 1px solid #ffc107; }
+
+         .action-btn {
+             padding: 6px 12px;
+             border-radius: 6px;
+             text-decoration: none;
+             font-size: 0.9rem;
+             margin-right: 5px;
+             transition: background 0.2s;
+             border: none;
+             cursor: pointer;
+             color: white;
+             display: inline-block;
+         }
+
+         .btn-edit { background-color: rgba(23, 162, 184, 0.6); border: 1px solid #17a2b8; }
+         .btn-edit:hover { background-color: #138496; }
+
+         .btn-delete { background-color: rgba(220, 53, 69, 0.6); border: 1px solid #dc3545; }
+         .btn-delete:hover { background-color: #c82333; }
+
+         /* Mensaje si está vacío */
+         .empty-state { text-align: center; padding: 40px; color: rgba(255,255,255,0.7); }
 
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div style="display: flex; align-items: center; justify-content: space-between;">
-        <h1>📚 Mis Cursos</h1>
-    </div>
+<div class="glass-container">
 
-    <a th:href="@{/courses/new}" class="btn-crear">+ Crear Nuevo Curso</a>
+    <div class="header-actions">
+        <h1>📚 Mis Cursos</h1>
+        <a th:href="@{/courses/new}" class="btn-new">+ Crear Curso</a>
+    </div>
 
     <table>
         <thead>
         <tr>
-            <th style="width: 50px;">ID</th> <th>Título</th>
+            <th style="width: 50px;">ID</th>
+            <th>Título</th>
             <th>Descripción</th>
-            <th>Estado</th>
-            <th style="width: 200px;">Acciones</th> </tr>
+            <th style="text-align: center;">Estado</th>
+            <th style="width: 180px; text-align: right;">Acciones</th>
+        </tr>
         </thead>
         <tbody>
         <tr th:each="curso : ${cursos}">
-            <td th:text="${curso.id}">1</td>
-            <td th:text="${curso.title}" style="font-weight: bold; color: #444;">...</td>
-            <td th:text="${curso.description}" style="color: #666;">...</td>
-            <td>
+            <td th:text="${curso.id}">#</td>
+            <td style="font-weight: bold;" th:text="${curso.title}">Título Ejemplo</td>
+            <td style="color: rgba(255,255,255,0.7);" th:text="${curso.description}">Descripción...</td>
+
+            <td style="text-align: center;">
                 <span th:if="${curso.published}" class="badge badge-success">Publicado</span>
-                <span th:unless="${curso.published}" class="badge badge-danger">Borrador</span>
+                <span th:unless="${curso.published}" class="badge badge-draft">Borrador</span>
             </td>
 
-            <td>
-                <a th:href="@{/courses/edit/{id}(id=${curso.id})}" class="btn btn-edit">
-                    ✏️ Editar
-                </a>
-                <br>
-                <br>
+            <td style="text-align: right;">
+                <a th:href="@{/courses/edit/{id}(id=${curso.id})}" class="action-btn btn-edit">✏️</a>
                 <a th:href="@{/courses/delete/{id}(id=${curso.id})}"
-                   onclick="return confirm('¿Seguro que quieres borrar este curso?');"
-                   class="btn btn-delete">
-                    🗑️ Borrar
-                </a>
+                   onclick="return confirm('¿Borrar este curso?');"
+                   class="action-btn btn-delete">🗑️</a>
             </td>
         </tr>
         </tbody>
     </table>
 
-    <div th:if="${cursos.empty}" style="text-align: center; margin-top: 30px; color: #888;">
-        <p>No tienes cursos creados todavía. ¡Anímate a crear uno!</p>
+    <div th:if="${cursos.empty}" class="empty-state">
+        <p>📭 No tienes cursos todavía. ¡Crea el primero!</p>
     </div>
+
 </div>
 
 </body>
