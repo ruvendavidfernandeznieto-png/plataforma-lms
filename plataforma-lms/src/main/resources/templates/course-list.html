@@ -110,7 +110,8 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="curso : ${cursos}">
+        <tr th:each="curso : ${cursos}"
+            th:if="${curso.published or #authorization.expression('hasRole(''ADMIN'')')}">
             <td th:text="${curso.id}">1</td>
             <td style="font-weight: bold; font-size: 1.1em;" th:text="${curso.title}">Java Básico</td>
             <td style="color: rgba(255,255,255,0.7);" th:text="${curso.description}">Aprende Java...</td>
