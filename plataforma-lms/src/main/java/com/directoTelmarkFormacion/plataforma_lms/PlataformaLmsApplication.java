@@ -4,7 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public classPlataformaLmsApplication {
+public class PlataformaLmsApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(PlataformaLmsApplication.class, args);
