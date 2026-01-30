@@ -35,7 +35,7 @@ public class HomeController {
         if (exito) {
             return "redirect:/login?logout";
         } else {
-            model.addAttribute("Error, el correo ya existe o hubo un error");
+            model.addAttribute("error", "Error, el correo ya existe o hubo un error");
             return "register";
         }
     }
