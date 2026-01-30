@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html   xmlns:th="http://www.thymeleaf.org"
+        xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <title>Lista de Cursos</title>
     <meta charset="UTF-8">
@@ -62,7 +63,7 @@
         <h1>📚 Mis Cursos</h1>
     </div>
 
-    <a th:href="@{/courses/new}" class="btn-crear">+ Crear Nuevo Curso</a>
+    <a th:href="@{/courses/new}" class="btn-crear" sec:authorize="hasRole('ADMIN')">+ Crear Nuevo Curso</a>
 
     <table>
         <thead>
@@ -70,7 +71,7 @@
             <th style="width: 50px;">ID</th> <th>Título</th>
             <th>Descripción</th>
             <th>Estado</th>
-            <th style="width: 200px;">Acciones</th> </tr>
+            <th style="width: 200px;" sec:authorize="hasRole('ADMIN')">Acciones</th> </tr>
         </thead>
         <tbody>
         <tr th:each="curso : ${cursos}">
@@ -82,7 +83,7 @@
                 <span th:unless="${curso.published}" class="badge badge-danger">Borrador</span>
             </td>
 
-            <td>
+            <td sec:authorize="hasRole('ADMIN')">
                 <a th:href="@{/courses/edit/{id}(id=${curso.id})}" class="btn btn-edit">
                     ✏️ Editar
                 </a>

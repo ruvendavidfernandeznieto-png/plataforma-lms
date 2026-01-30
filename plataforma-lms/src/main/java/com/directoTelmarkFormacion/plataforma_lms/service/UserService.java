@@ -34,6 +34,7 @@ public class UserService {
     public Optional<User> buscarPorEmail(String email){
         return userRepository.findByEmail(email);
     }
+
     public boolean registrarUsuario(String email, String password){
         if (userRepository.findByEmail(email).isPresent()){
             return false;
@@ -44,12 +45,14 @@ public class UserService {
     nuevoUsuario.setActive(true);
     nuevoUsuario.setCreatedAt(LocalDateTime.now());
 
-    Optional<Role> rolUsuario = roleRepository.findById(2L);
-    if (rolUsuario.isPresent()){
-        nuevoUsuario.setRole(rolUsuario.get());
-    }else {
-        return false;
+    Role rolUsuario = roleRepository.findByName("ROLE_USER").orElse(null);
+    if (rolUsuario == null){
+        rolUsuario = new Role("ROLE_USER");
+        roleRepository.save(rolUsuario);
     }
+
+    nuevoUsuario.setRole(rolUsuario);
+
     userRepository.save(nuevoUsuario);
     return true;
     }

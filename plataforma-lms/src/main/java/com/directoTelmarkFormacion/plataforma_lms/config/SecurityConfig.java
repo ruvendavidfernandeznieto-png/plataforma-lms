@@ -28,6 +28,9 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/css/**", "/js/**", "/images/**", "/register", "/register/**").permitAll()
+                        .requestMatchers("/register", "/login").permitAll()
+                        .requestMatchers("/courses/new", "/courses/save", "/courses/edit/**", "/courses/delete/**").hasRole("ADMIN")
+                        .requestMatchers("/courses", "/courses/view/**").authenticated()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
@@ -35,7 +38,7 @@ public class SecurityConfig {
                         .defaultSuccessUrl("/courses", true)
                         .permitAll()
                 )
-                .logout(logout -> logout
+                .logout((logout) -> logout
                         .permitAll()
                 );
         return http.build();
