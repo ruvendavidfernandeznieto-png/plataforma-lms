@@ -5,9 +5,7 @@ import com.directoTelmarkFormacion.plataforma_lms.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/courses")
@@ -57,5 +55,30 @@ public class CourseController {
     public String saveCourse(@ModelAttribute("course")Course course){
         courseService.guardarCurso(course);
         return "redirect:/courses";
+    }
+    @PostMapping("/{courseId}/add-module")
+    public String addModule(@PathVariable Long courseId,@RequestParam("title")String title){
+        courseService.guardarModulo(courseId,title);
+        return "redirect:/courses/edit" + courseId;
+    }
+
+    @PostMapping("/modules/{moduleId}/add-lesson")
+    public String addLesson(@PathVariable Long moduleId, @RequestParam("title")String title,@RequestParam("file")org.springframework.web.multipart.MultipartFile file){
+        try {
+            courseService.guardarLeccion(moduleId, title, file);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return "redirect:/courses";
+    }
+    @GetMapping("/{courseId}/modules/delete/{moduleId}")
+    public String borrarModulo(@PathVariable Long courseId, @PathVariable Long moduleId){
+        courseService.borrarModulo(moduleId);
+        return "redirect:/courses/edit" + courseId;
+    }
+    @PostMapping("{courseId}/modules/update/{moduleId}")
+    public String actualizarModulo(@PathVariable Long courseId, @PathVariable Long moduleId, @RequestParam("title")String title){
+        courseService.actualizarModulo(moduleId, title);
+        return "redirect:/courses/edit" + courseId;
     }
 }

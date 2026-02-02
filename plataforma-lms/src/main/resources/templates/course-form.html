@@ -3,80 +3,67 @@
 <head>
     <title>DTL | Gestión de Curso</title>
     <meta charset="UTF-8">
-    <link rel="icon" type="image/png" th:href="@{/images/logo.png}">
     <style>
+        /* ESTILOS (CSS) - Aquí definimos cómo se ve todo */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            min-height: 100vh;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             background-color: #004e92;
             background-image: radial-gradient(#ffffff33 1px, transparent 1px), linear-gradient(135deg, #002b5e 0%, #004e92 50%, #007bff 100%);
             background-size: 20px 20px, 100% 100%;
             background-attachment: fixed;
             color: white;
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            padding: 40px 0;
         }
 
         .glass-panel {
             background-color: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 20px;
             padding: 40px;
-            width: 100%;
-            max-width: 600px;
+            width: 90%;
+            max-width: 800px;
             box-shadow: 0 15px 35px rgba(0,0,0,0.3);
         }
 
-        h2 { text-align: center; margin-bottom: 30px; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+        h2, h3 { text-align: center; margin-bottom: 20px; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
 
-        label { display: block; margin-bottom: 8px; font-weight: bold; }
-
-        input[type="text"], textarea {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 20px;
-            border: none;
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.9);
-            color: #333;
-            box-sizing: border-box;
-            font-family: inherit;
+        /* CAMPOS DE TEXTO */
+        input[type="text"], textarea, input[type="file"] {
+            width: 100%; padding: 12px; margin-bottom: 20px; border: none; border-radius: 8px;
+            background: rgba(255, 255, 255, 0.9); color: #333; box-sizing: border-box;
         }
 
-        input:focus, textarea:focus { background: white; outline: none; box-shadow: 0 0 0 3px rgba(255,255,255,0.3); }
+        /* BOTONES */
+        button, a.btn { cursor: pointer; font-weight: bold; border: none; border-radius: 5px; text-decoration: none; display: inline-block; transition: 0.2s; }
+        button:hover, a.btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
 
-        .checkbox-group {
-            display: flex; align-items: center; gap: 10px; margin-bottom: 20px;
-            background: rgba(0,0,0,0.2); padding: 10px; border-radius: 8px;
+        .btn-green { background: #28a745; color: white; padding: 12px; width: 100%; }
+        .btn-blue { background: #17a2b8; color: white; padding: 10px 20px; }
+        .btn-yellow { background: #ffc107; color: #333; padding: 8px 15px; }
+        .btn-red { background: #dc3545; color: white; padding: 10px 15px; }
+        .btn-grey { background: #6c757d; color: white; padding: 8px; width: 100%; }
+
+        /* CAJAS DE MÓDULOS */
+        .module-box {
+            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 15px; padding: 20px; margin-bottom: 20px;
         }
-        input[type="checkbox"] { width: 20px; height: 20px; accent-color: #28a745; cursor: pointer; }
-
-        .btn-group { display: flex; gap: 15px; margin-top: 10px; }
-
-        .btn-save {
-            flex: 2; padding: 12px; background: #28a745; color: white; border: none; border-radius: 8px;
-            font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.2s;
+        .lesson-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.05);
         }
-        .btn-save:hover { background: #218838; transform: translateY(-2px); }
-
-        .btn-cancel {
-            flex: 1; padding: 12px; background: rgba(255, 255, 255, 0.2); color: white; text-decoration: none;
-            border-radius: 8px; font-weight: bold; text-align: center; border: 1px solid rgba(255,255,255,0.2);
-            display: flex; justify-content: center; align-items: center; transition: 0.2s;
-        }
-        .btn-cancel:hover { background: rgba(255, 255, 255, 0.3); }
     </style>
 </head>
 <body>
 
 <div class="glass-panel">
-    <h2 th:text="${course.id == null ? '✨ Crear Nuevo Curso' : '✏️ Editar Curso'}">
-        Gestión de Curso
-    </h2>
+
+    <h2 th:text="${course.id == null ? '✨ Crear Nuevo Curso' : '✏️ Editar Curso'}">Gestión Curso</h2>
 
     <form th:action="@{/courses/save}" method="post" th:object="${course}">
         <input type="hidden" th:field="*{id}" />
@@ -85,21 +72,62 @@
         <input type="text" th:field="*{title}" placeholder="Ej: Máster en Java" required />
 
         <label>Descripción</label>
-        <textarea th:field="*{description}" rows="5" placeholder="Contenido del curso..." required></textarea>
+        <textarea th:field="*{description}" rows="4" placeholder="Contenido del curso..." required></textarea>
 
-        <div class="checkbox-group">
-            <input type="checkbox" th:field="*{published}" id="pub" />
-            <label for="pub" style="margin:0; cursor:pointer;">Publicar inmediatamente</label>
+        <div style="margin-bottom: 20px; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 8px;">
+            <input type="checkbox" th:field="*{published}" id="pub" style="width:auto; margin-right:10px;"/>
+            <label for="pub" style="display:inline;">Publicar inmediatamente</label>
         </div>
 
-        <div class="btn-group">
-            <a th:href="@{/courses}" class="btn-cancel">Cancelar</a>
-            <button type="submit" class="btn-save"
-                    th:text="${course.id == null ? 'Guardar Curso' : 'Actualizar Curso'}">
-                Guardar
-            </button>
+        <div style="display: flex; gap: 15px;">
+            <a th:href="@{/courses}" class="btn" style="background: rgba(255,255,255,0.2); color: white; padding: 12px; flex:1; text-align:center;">Cancelar</a>
+            <button type="submit" class="btn btn-green" style="flex:2;">Guardar Curso</button>
         </div>
     </form>
+
+
+    <div th:if="${course.id != null}" style="margin-top: 50px; border-top: 1px solid rgba(255,255,255,0.3); padding-top: 30px;">
+
+        <h3>📚 Contenido del Curso</h3>
+
+        <form th:action="@{/courses/{id}/add-module(id=${course.id})}" method="post" style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: 10px; display: flex; gap: 10px; margin-bottom: 30px;">
+            <input type="text" name="title" placeholder="Ej: Tema 1: Introducción" required style="margin: 0; flex-grow: 1;"/>
+            <button type="submit" class="btn btn-blue">➕ Crear Tema</button>
+        </form>
+
+        <div th:each="modulo : ${course.modules}" class="module-box">
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                <form th:action="@{/courses/{cid}/modules/update/{mid}(cid=${course.id}, mid=${modulo.id})}" method="post" style="flex-grow: 1; display: flex; gap: 10px; margin: 0;">
+                    <input type="text" name="title" th:value="${modulo.title}" style="margin: 0; flex-grow: 1; background: rgba(0,0,0,0.2); color: #61dafb; font-weight: bold;"/>
+                    <button type="submit" class="btn btn-yellow">✏️ Guardar</button>
+                </form>
+
+                <a th:href="@{/courses/{cid}/modules/delete/{mid}(cid=${course.id}, mid=${modulo.id})}"
+                   onclick="return confirm('¿Borrar este módulo y sus lecciones?');"
+                   class="btn btn-red" style="margin-left: 10px;">🗑️</a>
+            </div>
+
+            <ul style="list-style: none; padding: 0;">
+                <li th:each="leccion : ${modulo.lessons}" class="lesson-item">
+                    <span>📄 <strong th:text="${leccion.title}">Lección</strong></span>
+                    <a th:if="${leccion.fileUrl != null}" th:href="@{'/uploads/' + ${leccion.fileUrl}}" target="_blank" class="btn" style="background: #28a745; color: white; padding: 5px 10px; font-size: 0.8rem;">Ver Archivo 👁️</a>
+                </li>
+            </ul>
+
+            <div style="margin-top: 15px; padding-top: 10px; border-top: 1px dashed rgba(255,255,255,0.2);">
+                <small style="opacity: 0.7;">Subir material:</small>
+                <form th:action="@{/courses/modules/{id}/add-lesson(id=${modulo.id})}" method="post" enctype="multipart/form-data" style="margin-top: 5px;">
+                    <input type="text" name="title" placeholder="Nombre del archivo" required style="padding: 8px; margin-bottom: 10px;"/>
+                    <input type="file" name="file" required style="color: white; margin-bottom: 10px; font-size: 0.9em;"/>
+                    <button type="submit" class="btn btn-grey">⬆️ Subir Lección</button>
+                </form>
+            </div>
+
+        </div> <p th:if="${#lists.isEmpty(course.modules)}" style="text-align: center; opacity: 0.6;">No hay temas creados.</p>
+
+    </div>
+
 </div>
 
 </body>

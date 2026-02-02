@@ -3,12 +3,12 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "lessons")
-
 public class Lesson {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
+
 
     @Column(name = "content_type")
     private String contentType;
@@ -18,6 +18,12 @@ public class Lesson {
 
     @Column(name = "order_index")
     private Integer orderIndex;
+
+    @Column(name = "file_url")
+    private String fileUrl;
+
+    @Column(name = "file_type")
+    private String fileType;
 
     @ManyToOne
     @JoinColumn(name = "module_id")
@@ -62,6 +68,20 @@ public class Lesson {
 
     public void setOrderIndex(Integer orderIndex){
         this.orderIndex = orderIndex;
+    }
+
+    public String getFileUrl(){
+        return fileUrl;
+    }
+    public void setFileUrl(String fileUrl){
+        this.fileUrl = fileUrl;
+    }
+
+    public String getFileType(){
+        return fileType;
+    }
+    public void setFileType(String fileType){
+        this.fileType = fileType;
     }
 
     public Module getModule(){
