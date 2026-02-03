@@ -4,7 +4,7 @@
     <title>DTL | Gestión de Curso</title>
     <meta charset="UTF-8">
     <style>
-        /* ESTILOS (CSS) - Aquí definimos cómo se ve todo */
+        /* ESTILOS (CSS) */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #004e92;
@@ -32,7 +32,7 @@
 
         h2, h3 { text-align: center; margin-bottom: 20px; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
 
-        /* CAMPOS DE TEXTO */
+        /* INPUTS */
         input[type="text"], textarea, input[type="file"] {
             width: 100%; padding: 12px; margin-bottom: 20px; border: none; border-radius: 8px;
             background: rgba(255, 255, 255, 0.9); color: #333; box-sizing: border-box;
@@ -48,7 +48,6 @@
         .btn-red { background: #dc3545; color: white; padding: 10px 15px; }
         .btn-grey { background: #6c757d; color: white; padding: 8px; width: 100%; }
 
-        /* CAJAS DE MÓDULOS */
         .module-box {
             background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
             border-radius: 15px; padding: 20px; margin-bottom: 20px;
@@ -85,8 +84,7 @@
         </div>
     </form>
 
-
-    <div th:if="${course.id != null}" style="margin-top: 50px; border-top: 1px solid rgba(255,255,255,0.3); padding-top: 30px;">
+    <div th:if="${course.id != null and course.id > 0}" style="margin-top: 50px; border-top: 1px solid rgba(255,255,255,0.3); padding-top: 30px;">
 
         <h3>📚 Contenido del Curso</h3>
 
