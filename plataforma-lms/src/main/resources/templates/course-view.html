@@ -4,7 +4,7 @@
     <title>DTL | Aula Virtual</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" th:href="@{/images/logo.png}">
+    <link rel="icon" type="image/png" th:href="@{/images/favicon.png}">
 
     <style>
         body {
@@ -20,6 +20,26 @@
             background-size: 20px 20px, 100% 100%;
             background-attachment: fixed;
             color: white;
+        }
+
+        .logo-esquina {
+            position: fixed;
+            top: 20px;
+            left: 30px;
+            z-index: 9999;
+            display: block;
+        }
+
+        .logo-esquina img {
+            height: 120px;
+            width: auto;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
+            transition: transform 0.3s ease;
+        }
+
+        .logo-esquina img:hover {
+            transform: scale(1.1);
+            cursor: pointer;
         }
 
         .glass-container {
@@ -130,6 +150,10 @@
     </style>
 </head>
 <body>
+
+<a th:href="@{/courses}" class="logo-esquina" title="Ir al Catálogo">
+    <img th:src="@{/images/logo.png}" alt="Logo DTL">
+</a>
 
 <div class="glass-container">
 

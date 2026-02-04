@@ -4,10 +4,9 @@
     <title>DTL | Nuevo Curso</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" th:href="@{/images/logo.png}">
+    <link rel="icon" type="image/png" th:href="@{/images/favicon.png}">
 
     <style>
-        /* --- 1. FONDO (Mismo que la lista) --- */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             min-height: 100vh;
@@ -22,7 +21,26 @@
             color: white;
         }
 
-        /* --- 2. CONTENEDOR (Cristal) --- */
+        .logo-esquina {
+            position: fixed;
+            top: 20px;
+            left: 30px;
+            z-index: 9999;
+            display: block;
+        }
+
+        .logo-esquina img {
+            height: 120px;
+            width: auto;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
+            transition: transform 0.3s ease;
+        }
+
+        .logo-esquina img:hover {
+            transform: scale(1.1);
+            cursor: pointer;
+        }
+
         .glass-panel {
             background-color: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
@@ -37,7 +55,6 @@
 
         h2 { text-align: center; margin-top: 0; margin-bottom: 30px; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
 
-        /* --- 3. INPUTS --- */
         label { display: block; margin-bottom: 8px; font-weight: bold; font-size: 0.95rem; }
 
         input[type="text"], textarea {
@@ -46,7 +63,7 @@
             margin-bottom: 20px;
             border: none;
             border-radius: 8px;
-            background: rgba(255, 255, 255, 0.9); /* Blanco casi opaco para leer bien */
+            background: rgba(255, 255, 255, 0.9);
             color: #333;
             font-family: inherit;
             box-sizing: border-box;
@@ -58,7 +75,6 @@
             box-shadow: 0 0 0 3px rgba(255,255,255,0.3);
         }
 
-        /* --- 4. BOTONES --- */
         .btn-container { display: flex; gap: 15px; margin-top: 10px; }
 
         .btn-save {
@@ -93,6 +109,10 @@
     </style>
 </head>
 <body>
+
+<a th:href="@{/courses}" class="logo-esquina" title="Ir al Catálogo">
+    <img th:src="@{/images/logo.png}" alt="Logo DTL">
+</a>
 
 <div class="glass-panel">
     <h2>✨ Nuevo Curso</h2>
