@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.thymeleaf.org ">
 <head>
     <title>DTL | Mis Cursos</title>
     <meta charset="UTF-8">
@@ -8,7 +9,6 @@
     <link rel="icon" type="image/png" th:href="@{/images/logo.png}">
 
     <style>
-        /* --- ESTILO GLASSMORPHISM (AZUL) --- */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             min-height: 100vh;
@@ -19,7 +19,7 @@
             align-items: flex-start;
             background-color: #004e92;
             background-image: radial-gradient(#ffffff33 1px, transparent 1px), linear-gradient(135deg, #002b5e 0%, #004e92 50%, #007bff 100%);
-            background-size: 20px 20px, 100% 100%;
+            background-size: 20px 20px, 100%;
             background-attachment: fixed;
             color: white;
         }
@@ -48,7 +48,6 @@
 
         h1 { margin: 0; font-size: 2rem; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
 
-        /* Botón verde (Solo Admin) */
         .btn-new {
             background: #28a745; color: white; padding: 10px 20px;
             text-decoration: none; border-radius: 50px; font-weight: bold;
@@ -57,7 +56,7 @@
         }
         .btn-new:hover { background: #218838; transform: translateY(-2px); }
 
-        /* Tabla */
+
         table { width: 100%; border-collapse: collapse; color: white; }
 
         th {
@@ -71,18 +70,36 @@
         tr:last-child td { border-bottom: none; }
         tr:hover { background-color: rgba(255, 255, 255, 0.05); }
 
-        /* Badges */
+
         .badge { padding: 5px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: bold; text-transform: uppercase; }
         .badge-success { background-color: rgba(40, 167, 69, 0.2); color: #9be6a8; border: 1px solid #28a745; }
         .badge-draft { background-color: rgba(255, 193, 7, 0.2); color: #ffeeba; border: 1px solid #ffc107; }
 
-        /* Botones de acción (Editar/Borrar) */
+
         .action-btn {
             display: inline-block; padding: 6px 12px; border-radius: 6px;
             text-decoration: none; font-size: 1.2rem; margin-right: 5px;
             transition: transform 0.2s; border: none; cursor: pointer; color: white;
         }
         .action-btn:hover { transform: scale(1.1); }
+
+
+        .btn-enter {
+            background-color: #17a2b8;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(23, 162, 184, 0.3);
+            transition: 0.2s;
+        }
+        .btn-enter:hover {
+            background-color: #138496;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(23, 162, 184, 0.5);
+        }
 
         .empty-state { text-align: center; padding: 40px; color: rgba(255,255,255,0.7); }
     </style>
@@ -106,14 +123,25 @@
             <th>Título</th>
             <th>Descripción</th>
             <th style="text-align: center;">Estado</th>
-            <th style="width: 150px; text-align: right;" sec:authorize="hasRole('ADMIN')">Acciones</th>
+            <th style="width: 200px; text-align: right;">Acciones</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="curso : ${cursos}"
             th:if="${curso.published or #authorization.expression('hasRole(''ADMIN'')')}">
+
             <td th:text="${curso.id}">1</td>
-            <td style="font-weight: bold; font-size: 1.1em;" th:text="${curso.title}">Java Básico</td>
+
+            <td>
+                <a th:href="@{/courses/view/{id}(id=${curso.id})}"
+                   style="color: white; font-weight: bold; font-size: 1.1em; text-decoration: none;"
+                   onmouseover="this.style.textDecoration='underline'"
+                   onmouseout="this.style.textDecoration='none'"
+                   th:text="${curso.title}">
+                    Java Básico
+                </a>
+            </td>
+
             <td style="color: rgba(255,255,255,0.7);" th:text="${curso.description}">Aprende Java...</td>
 
             <td style="text-align: center;">
@@ -121,12 +149,18 @@
                 <span th:unless="${curso.published}" class="badge badge-draft">Borrador</span>
             </td>
 
-            <td style="text-align: right;" sec:authorize="hasRole('ADMIN')">
-                <a th:href="@{/courses/edit/{id}(id=${curso.id})}" class="action-btn" title="Editar">✏️</a>
+            <td style="text-align: right;">
+                <a th:href="@{/courses/view/{id}(id=${curso.id})}" class="btn-enter">
+                    Entrar
+                </a>
 
-                <a th:href="@{/courses/delete/{id}(id=${curso.id})}"
-                   onclick="return confirm('¿Seguro que quieres borrar este curso?');"
-                   class="action-btn" title="Borrar">🗑️</a>
+                <span sec:authorize="hasRole('ADMIN')"
+                      style="margin-left: 10px; padding-left: 10px; border-left: 1px solid rgba(255,255,255,0.3);">
+                    <a th:href="@{/courses/edit/{id}(id=${curso.id})}" class="action-btn" title="Editar">✏️</a>
+                    <a th:href="@{/courses/delete/{id}(id=${curso.id})}"
+                       onclick="return confirm('¿Seguro que quieres borrar este curso?');"
+                       class="action-btn" title="Borrar">🗑️</a>
+                </span>
             </td>
         </tr>
         </tbody>

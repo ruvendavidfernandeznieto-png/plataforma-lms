@@ -11,6 +11,7 @@ public class Module {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String title;
+    private boolean visible = true;
 
     @Column(name = "order_index")
     private Integer orderIndex;
@@ -47,6 +48,7 @@ public class Module {
     public void setOrderIndex(Integer orderIndex){
         this.orderIndex = orderIndex;
     }
+
     public Course getCourse(){
         return course;
     }
@@ -62,4 +64,8 @@ public class Module {
     public void setLessons(List<Lesson> lessons){
         this.lessons = lessons;
     }
+
+    public void setVisible(boolean b) {}
+
+    public boolean isVisible() { return false; }
 }

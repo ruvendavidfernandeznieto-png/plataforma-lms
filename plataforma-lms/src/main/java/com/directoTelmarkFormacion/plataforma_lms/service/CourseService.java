@@ -7,7 +7,6 @@ import com.directoTelmarkFormacion.plataforma_lms.repository.CourseRepository;
 import com.directoTelmarkFormacion.plataforma_lms.repository.ModuleRepository;
 import com.directoTelmarkFormacion.plataforma_lms.repository.LessonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,12 +26,14 @@ public class CourseService {
     @Autowired
     private CourseRepository courseRepository;
 
-
     @Autowired
     private ModuleRepository moduleRepository;
 
     @Autowired
     private LessonRepository lessonRepository;
+
+    @Autowired
+    private com.directoTelmarkFormacion.plataforma_lms.repository.ProgressRepository progressRepository;
 
     public List<Course> obtenerTodos(){
         return courseRepository.findAll();
@@ -51,8 +52,19 @@ public class CourseService {
     }
 
     public void borrarCurso(Long id){
-        courseRepository.deleteById(id);
+
+        Optional<Course> courseOpt = courseRepository.findById(id);
+        if(courseOpt.isPresent()) {
+            Course course = courseOpt.get();
+
+            for (Module module : course.getModules()) {
+                limpiarArchivosModulo(module);
+            }
+
+            courseRepository.deleteById(id);
+        }
     }
+
     public void guardarModulo(Long courseId, String titulo) {
         Course course = courseRepository.findById(courseId)
                 .orElseThrow(() -> new RuntimeException("Curso no encontrado"));
@@ -60,13 +72,37 @@ public class CourseService {
         Module modulo = new Module();
         modulo.setTitle(titulo);
         modulo.setCourse(course);
+        modulo.setVisible(true);
 
         int orden = (course.getModules() != null) ? course.getModules().size() + 1 : 1;
         modulo.setOrderIndex(orden);
 
         moduleRepository.save(modulo);
     }
-    public void guardarLeccion(Long moduleId, String titulo,MultipartFile file) throws IOException{
+
+    public void borrarModulo(Long moduleId){
+        Module module = moduleRepository.findById(moduleId).orElse(null);
+        if (module != null) {
+            limpiarArchivosModulo(module);
+            moduleRepository.delete(module);
+        }
+    }
+
+    public void actualizarModulo(Long moduleId, String newTitle){
+        Module module = moduleRepository.findById(moduleId)
+                .orElseThrow(() -> new RuntimeException("Módulo no encontrado"));
+        module.setTitle(newTitle);
+        moduleRepository.save(module);
+    }
+
+    public void toggleVisibilidadModulo(Long moduleId) {
+        Module module = moduleRepository.findById(moduleId)
+                .orElseThrow(() -> new RuntimeException("Módulo no encontrado"));
+        module.setVisible(!module.isVisible());
+        moduleRepository.save(module);
+    }
+
+    public void guardarLeccion(Long moduleId, String titulo, MultipartFile file) throws IOException{
         Module modulo = moduleRepository.findById(moduleId)
                 .orElseThrow(() -> new RuntimeException("Módulo no encontrado"));
         Lesson lesson = new Lesson();
@@ -78,6 +114,7 @@ public class CourseService {
 
         if (file != null && !file.isEmpty()){
             String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+
             String uniqueFileName = System.currentTimeMillis() + "_" + fileName;
 
             lesson.setFileUrl(uniqueFileName);
@@ -97,13 +134,32 @@ public class CourseService {
         }
         lessonRepository.save(lesson);
     }
-    public void borrarModulo(Long moduleId){
-        moduleRepository.deleteById(moduleId);
+
+    public void borrarLeccion(Long lessonId) {
+        Lesson lesson = lessonRepository.findById(lessonId).orElse(null);
+        if (lesson != null) {
+            borrarArchivoFisico(lesson.getFileUrl());
+            progressRepository.deleteByLesson(lesson);
+            lessonRepository.delete(lesson);
+        }
     }
-    public void actualizarModulo(Long moduleId, String newTitle){
-        Module module = moduleRepository.findById(moduleId)
-                .orElseThrow(() -> new RuntimeException("Módulo no encontrado"));
-        module.setTitle(newTitle);
-        moduleRepository.save(module);
+
+    private void limpiarArchivosModulo(Module module) {
+        if (module.getLessons() != null) {
+            for (Lesson lesson : module.getLessons()) {
+                borrarArchivoFisico(lesson.getFileUrl());
+            }
+        }
+    }
+
+    private void borrarArchivoFisico(String fileName) {
+        if (fileName != null) {
+            try {
+                Path filePath = Paths.get("uploads/").resolve(fileName);
+                Files.deleteIfExists(filePath);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
